@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Candidate Tracker</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <header class="navbar">
+    <img src="MG.jpg" alt="Logo" class="logo"/>
+    <h1>Candidate Tracker</h1>
+  </header>
+
+  <main class="form-container">
+    <form id="candidateForm">
+      <div class="form-group"><label>Candidate Name: <input type="text" name="candidateName" required></label></div>
+      <div class="form-group"><label>Staff Name: <input type="text" name="staffName" required></label></div>
+      <div class="form-group"><label>Passport Number: <input type="text" name="passportNumber"></label></div>
+      <div class="form-group"><label>Reference: <input type="text" name="reference"></label></div>
+
+      <div class="form-group">
+        <label for="resume">Resume:</label>
+        <select name="resume" id="resume">
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Boarding Payment: <input type="text" name="boardingPayment"></label></div>
+      <div class="form-group"><label>Boarding Payment Date: <input type="date" name="boardingPaymentDate"></label></div>
+      <div class="form-group"><label>Boarding Agreement Signed Date: <input type="date" name="boardingAgreementDate"></label></div>
+      <div class="form-group"><label>Offer Letter Received Date: <input type="date" name="offerLetterDate"></label></div>
+      <div class="form-group"><label>Offer Letter Payment: <input type="text" name="offerLetterPayment"></label></div>
+      <div class="form-group"><label>Original Document Received: <input type="date" name="originalDocumentDate"></label></div>
+
+      <div class="form-group">
+        <label for="documentVerification">Document Verification:</label>
+        <select name="documentVerification" id="documentVerification">
+          <option value="">Select</option>
+          <option value="Process">Process</option>
+          <option value="Complete">Complete</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="medical">Medical:</label>
+        <select name="medical" id="medical">
+          <option value="">Select</option>
+          <option value="Process">Process</option>
+          <option value="Completed">Completed</option>
+          <option value="Fit">Fit</option>
+          <option value="Unfit">Unfit</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="ticket">Ticket:</label>
+        <select name="ticket" id="ticket">
+          <option value="">Select</option>
+          <option value="Process">Process</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="workPermit">Work Permit:</label>
+        <select name="workPermit" id="workPermit">
+          <option value="">Select</option>
+          <option value="Received">Received</option>
+          <option value="Not Received">Not Received</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Upload Document: <input type="file" name="document" accept=".pdf,.doc,.docx,image/*" required></label></div>
+
+      <div class="buttons">
+        <button type="button" onclick="saveData()">Save</button>
+        <button type="button" onclick="editData()">Edit</button>
+        <button type="button" onclick="searchData()">Search</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="footer"><p>&copy; 2025 Mavrick Ghouse</p></footer>
+
+  <script>
+    function saveData() {
+      const form = document.forms['candidateForm'];
+      const data = {
+        candidateName: form.candidateName.value,
+        staffName: form.staffName.value,
+        passportNumber: form.passportNumber.value,
+        reference: form.reference.value,
+        resume: form.resume.value,
+        documentVerification: form.documentVerification.value,
+        medical: form.medical.value,
+        ticket: form.ticket.value,
+        workPermit: form.workPermit.value,
+        boardingPayment: form.boardingPayment.value,
+        boardingPaymentDate: form.boardingPaymentDate.value,
+        boardingAgreementDate: form.boardingAgreementDate.value,
+        offerLetterDate: form.offerLetterDate.value,
+        offerLetterPayment: form.offerLetterPayment.value,
+        originalDocumentDate: form.originalDocumentDate.value,
+        document: form.document.files[0] ? form.document.files[0].name : ''
+      };
+
+      localStorage.setItem(data.candidateName, JSON.stringify(data));
+      alert('Data saved successfully!');
+      form.reset();
+    }
+
+    function editData() {
+      const name = prompt('Enter candidate name to edit:');
+      const data = JSON.parse(localStorage.getItem(name));
+
+      if (data) {
+        const form = document.forms['candidateForm'];
+        form.candidateName.value = data.candidateName;
+        form.staffName.value = data.staffName;
+        form.passportNumber.value = data.passportNumber;
+        form.reference.value = data.reference;
+        form.resume.value = data.resume || '';
+        form.documentVerification.value = data.documentVerification || '';
+        form.medical.value = data.medical || '';
+        form.ticket.value = data.ticket || '';
+        form.workPermit.value = data.workPermit || '';
+        form.boardingPayment.value = data.boardingPayment || '';
+        form.boardingPaymentDate.value = data.boardingPaymentDate || '';
+        form.boardingAgreementDate.value = data.boardingAgreementDate || '';
+        form.offerLetterDate.value = data.offerLetterDate || '';
+        form.offerLetterPayment.value = data.offerLetterPayment || '';
+        form.originalDocumentDate.value = data.originalDocumentDate || '';
+
+        alert("Data loaded into form for editing.");
+      } else {
+        alert('Candidate not found.');
+      }
+    }
+
+    function searchData() {
+      const name = prompt('Enter candidate name to search:');
+      const data = JSON.parse(localStorage.getItem(name));
+
+      if (data) {
+        localStorage.setItem('searchResult', JSON.stringify(data));
+        window.location.href = 'results.html';
+      } else {
+        alert('No data found.');
+      }
+    }
+  </script>
+</body>
+</html>

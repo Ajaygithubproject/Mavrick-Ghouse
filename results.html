@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search Result - Candidate Tracker</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .result-container {
+      border: 1px solid #ccc;
+      padding: 15px;
+    }
+    .buttons button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <img src="MG.jpg" alt="Logo" class="logo"/>
+    <h1>Candidate Tracker - Search Result</h1>
+  </header>
+
+  <div class="result-container" id="result">
+    <h2>Search Result</h2>
+    <div id="resultContent"></div>
+    <button onclick="window.print()">Print</button>
+    <button onclick="window.history.back()">Go Back</button>
+  </div>
+
+  <footer class="footer"><p>&copy; 2025 Delightful Decor</p></footer>
+
+  <script>
+    // Retrieve the stored search result
+    const data = JSON.parse(localStorage.getItem('searchResult'));
+
+    if (data) {
+      const resultContent = document.getElementById('resultContent');
+      resultContent.innerHTML = `
+        <p><strong>Candidate Name:</strong> ${data.candidateName}</p>
+        <p><strong>Staff Name:</strong> ${data.staffName}</p>
+        <p><strong>Passport Number:</strong> ${data.passportNumber}</p>
+        <p><strong>Reference:</strong> ${data.reference}</p>
+        <p><strong>Resume:</strong> ${(data.resume || []).join(', ')}</p>
+        <p><strong>Boarding Payment:</strong> ${data.boardingPayment}</p>
+        <p><strong>Boarding Payment Date:</strong> ${data.boardingPaymentDate}</p>
+        <p><strong>Boarding Agreement Signed Date:</strong> ${data.boardingAgreementDate}</p>
+        <p><strong>Offer Letter Received Date:</strong> ${data.offerLetterDate}</p>
+        <p><strong>Offer Letter Payment:</strong> ${data.offerLetterPayment}</p>
+        <p><strong>Original Document Received Date:</strong> ${data.originalDocumentDate}</p>
+        <p><strong>Document Verification:</strong> ${(data.documentVerification || []).join(', ')}</p>
+        <p><strong>Medical:</strong> ${(data.medical || []).join(', ')}</p>
+        <p><strong>Ticket:</strong> ${(data.ticket || []).join(', ')}</p>
+        <p><strong>Work Permit:</strong> ${(data.workPermit || []).join(', ')}</p>
+        <p><strong>Uploaded Document:</strong> ${data.document || 'No file upload'}</p>
+      `;
+    } else {
+      document.getElementById('result').innerHTML = '<p>No data available.</p>';
+    }
+  </script>
+
+</body>
+</html>
