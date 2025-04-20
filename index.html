@@ -4,16 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Candidate Tracker</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-
   <header class="navbar">
-    <img src="MG.jpg" alt="Logo" class="logo"/>
+    <img src="MG.jpg" alt="Logo" class="logo" />
     <h1>Candidate Tracker</h1>
   </header>
 
-  <main class="form-container">
+  <main class="form-container animate-fade">
     <form id="candidateForm">
       <div class="form-group"><label>Candidate Name: <input type="text" name="candidateName" required></label></div>
       <div class="form-group"><label>Staff Name: <input type="text" name="staffName" required></label></div>
@@ -76,7 +79,7 @@
 
       <div class="form-group"><label>Upload Document: <input type="file" name="document" accept=".pdf,.doc,.docx,image/*" required></label></div>
 
-      <div class="buttons">
+      <div class="button-group">
         <button type="button" onclick="saveData()">Save</button>
         <button type="button" onclick="editData()">Edit</button>
         <button type="button" onclick="searchData()">Search</button>
@@ -84,7 +87,7 @@
     </form>
   </main>
 
-  <footer class="footer"><p>&copy; 2025 Mavrick Ghouse</p></footer>
+  <footer class="footer"><p>&copy; 2025 Maverick Ghouse</p></footer>
 
   <script>
     function saveData() {
@@ -95,47 +98,31 @@
         passportNumber: form.passportNumber.value,
         reference: form.reference.value,
         resume: form.resume.value,
-        documentVerification: form.documentVerification.value,
-        medical: form.medical.value,
-        ticket: form.ticket.value,
-        workPermit: form.workPermit.value,
         boardingPayment: form.boardingPayment.value,
         boardingPaymentDate: form.boardingPaymentDate.value,
         boardingAgreementDate: form.boardingAgreementDate.value,
         offerLetterDate: form.offerLetterDate.value,
         offerLetterPayment: form.offerLetterPayment.value,
         originalDocumentDate: form.originalDocumentDate.value,
+        documentVerification: form.documentVerification.value,
+        medical: form.medical.value,
+        ticket: form.ticket.value,
+        workPermit: form.workPermit.value,
         document: form.document.files[0] ? form.document.files[0].name : ''
       };
-
       localStorage.setItem(data.candidateName, JSON.stringify(data));
-      alert('Data saved successfully!');
-      form.reset();
+      localStorage.setItem('searchResult', JSON.stringify(data));
+      window.location.href = 'results.html';
     }
 
     function editData() {
       const name = prompt('Enter candidate name to edit:');
       const data = JSON.parse(localStorage.getItem(name));
-
       if (data) {
         const form = document.forms['candidateForm'];
-        form.candidateName.value = data.candidateName;
-        form.staffName.value = data.staffName;
-        form.passportNumber.value = data.passportNumber;
-        form.reference.value = data.reference;
-        form.resume.value = data.resume || '';
-        form.documentVerification.value = data.documentVerification || '';
-        form.medical.value = data.medical || '';
-        form.ticket.value = data.ticket || '';
-        form.workPermit.value = data.workPermit || '';
-        form.boardingPayment.value = data.boardingPayment || '';
-        form.boardingPaymentDate.value = data.boardingPaymentDate || '';
-        form.boardingAgreementDate.value = data.boardingAgreementDate || '';
-        form.offerLetterDate.value = data.offerLetterDate || '';
-        form.offerLetterPayment.value = data.offerLetterPayment || '';
-        form.originalDocumentDate.value = data.originalDocumentDate || '';
-
-        alert("Data loaded into form for editing.");
+        Object.keys(data).forEach(key => {
+          if (form[key]) form[key].value = data[key];
+        });
       } else {
         alert('Candidate not found.');
       }
@@ -144,7 +131,6 @@
     function searchData() {
       const name = prompt('Enter candidate name to search:');
       const data = JSON.parse(localStorage.getItem(name));
-
       if (data) {
         localStorage.setItem('searchResult', JSON.stringify(data));
         window.location.href = 'results.html';
