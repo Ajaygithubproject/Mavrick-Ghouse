@@ -206,7 +206,7 @@ label {
 /* Mobile Styles - background image and blur effect */
 @media screen and (max-width: 768px) {
   body {
-    background: url('abc.jpg') no-repeat center center fixed;
+    background: url('abc1.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 
