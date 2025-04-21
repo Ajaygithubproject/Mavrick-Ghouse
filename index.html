@@ -6,9 +6,18 @@
   <title>Candidate Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 4px;
+    }
+    input:invalid {
+      border-color: red;
+    }
+  </style>
 </head>
 <body>
   <header class="navbar">
@@ -20,7 +29,12 @@
     <form id="candidateForm">
       <div class="form-group"><label>Candidate Name: <input type="text" name="candidateName" required></label></div>
       <div class="form-group"><label>Staff Name: <input type="text" name="staffName" required></label></div>
-      <div class="form-group"><label>Passport Number: <input type="text" name="passportNumber"></label></div>
+      <div class="form-group">
+        <label>Passport Number:
+          <input type="text" name="passportNumber" id="passportNumber" oninput="validatePassport()">
+        </label>
+        <div id="passportError" class="error-message"></div>
+      </div>
       <div class="form-group"><label>Reference: <input type="text" name="reference"></label></div>
 
       <div class="form-group">
@@ -88,9 +102,44 @@
   </main>
 
   <footer class="footer"><p>&copy; 2025 Maverick Ghouse</p></footer>
-
   <script>
+    // Set today's date as max date for all date inputs
+    window.onload = function () {
+      const today = new Date().toISOString().split("T")[0];
+      const dateInputs = document.querySelectorAll('input[type="date"]');
+      dateInputs.forEach(input => {
+        input.setAttribute("max", today);
+      });
+    };
+  
+    function validatePassport() {
+      const input = document.getElementById("passportNumber");
+      const errorDiv = document.getElementById("passportError");
+      const value = input.value.trim();
+      const regex = /^[A-Za-z][0-9]{7}$/;
+  
+      if (value === "") {
+        errorDiv.textContent = "";
+        input.style.borderColor = "";
+      } else if (!regex.test(value)) {
+        errorDiv.textContent = "Passport number must start with a letter EX:A1234567.";
+        input.style.borderColor = "red";
+      } else {
+        errorDiv.textContent = "";
+        input.style.borderColor = "";
+      }
+    }
+  
     function saveData() {
+      const passportInput = document.getElementById("passportNumber");
+      const errorDiv = document.getElementById("passportError");
+      const regex = /^[A-Za-z][0-9]{7}$/;
+      if (!regex.test(passportInput.value.trim())) {
+        errorDiv.textContent = "Please enter a valid passport number (1 letter + 7 digits).";
+        passportInput.focus();
+        return;
+      }
+  
       const form = document.forms['candidateForm'];
       const data = {
         candidateName: form.candidateName.value,
@@ -114,7 +163,7 @@
       localStorage.setItem('searchResult', JSON.stringify(data));
       window.location.href = 'results.html';
     }
-
+  
     function editData() {
       const name = prompt('Enter candidate name to edit:');
       const data = JSON.parse(localStorage.getItem(name));
@@ -127,7 +176,7 @@
         alert('Candidate not found.');
       }
     }
-
+  
     function searchData() {
       const name = prompt('Enter candidate name to search:');
       const data = JSON.parse(localStorage.getItem(name));
@@ -139,5 +188,6 @@
       }
     }
   </script>
+  
 </body>
 </html>
